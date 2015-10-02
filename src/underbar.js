@@ -209,7 +209,7 @@
     // TIP: Try re-using reduce() here.
 
     return _.reduce(collection, function(allTrue, item) {
-      if (!iterator(item)) {
+      if ((iterator !== undefined ? !iterator(item) : !item)) {
         return false;
       }
       return allTrue;
@@ -220,9 +220,8 @@
   // provided, provide a default one
   _.some = function(collection, iterator) {
     // TIP: There's a very clever way to re-use every() here.
-    iterator = (typeof iterator !== 'undefined' ? iterator : function(item) {return item % 2 === 0});
     return _.reduce(collection, function(someTrue, item) {
-      if (iterator(item)) {
+      if ((iterator !== undefined ? iterator(item) : item)) {
         return true;
       }
       return someTrue;
