@@ -111,6 +111,20 @@
 
   // Produce a duplicate-free version of the array.
   _.uniq = function(array) {
+    var returnArray = [];
+
+    _.each(array, function(item) {
+      var inReturnArray = false
+      _.each(returnArray, function(number) {
+        if (item === number) {
+          inReturnArray = true;
+        }
+      })
+      if (!inReturnArray) {
+        returnArray.push(item);
+      }
+    })
+    return returnArray;
   };
 
 
