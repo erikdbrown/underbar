@@ -319,6 +319,19 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+
+    var results = [];
+    var result;
+
+    return function() {
+      if(_.some(results, function(item) { return item === result })) {
+        return result;
+      } else {
+        result = func.apply(this, arguments);
+        results.push(result);
+        return result;
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -342,6 +355,15 @@
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    var copiedArray = array.slice(0,array.length);
+    var shuffledArray = [];
+
+    while(copiedArray.length > 0) {
+      var randomNum = Math.floor(Math.random() * copiedArray.length);
+      shuffledArray.push(copiedArray[randomNum]);
+      copiedArray.splice(randomNum,1);
+    }
+    return shuffledArray;
   };
 
 
