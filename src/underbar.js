@@ -324,14 +324,20 @@
     var result;
 
     return function() {
-      if(_.some(results, function(item) { return item === result })) {
+
+      if (_.contains(results, function(item) { return item === func })) {
+        // if the function has been called before
+        // locate result from array and return
         return result;
       } else {
+        // push the result into the array
+        // return the result
         result = func.apply(this, arguments);
-        results.push(result);
+        results.push(func);
         return result;
       }
-    }
+      }  
+
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -400,6 +406,32 @@
   //
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
+
+    var anyArrays = function(array) {
+      var answer = false;
+      _.each(array, function(item) {
+        if (Array.isArray(item)) {
+          answer = true;
+        }
+      })
+      return answer;
+    }
+
+    while (anyArrays(nestedArray)) {
+      var returnArray = [];
+      _.each(nestedArray, function(item) {
+        if (Array.isArray(item)) {
+          _.each(item, function(contents) {
+            returnArray.push(contents);
+          })
+        } else {
+          returnArray.push(item);
+        }
+      })
+      nestedArray = returnArray;
+    }
+
+    return nestedArray;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
@@ -410,6 +442,28 @@
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+      var firstArray = arguments[0];
+      var otherValues = [];
+      var returnArray = [];
+
+      for (var i = 1; i < arguments.length; i++) {
+        _.each(arguments[i], function(item) {
+          otherValues.push(item);
+        })
+      }
+
+    _.each(firstArray, function(item) {
+      var matched = false;
+      _.each(otherValues, function(other) {
+        if (other === item) {
+          matched = true;
+        }
+      })
+      if (!matched) {
+        returnArray.push(item);
+      }
+    });
+    return returnArray;
   };
 
   // Returns a function, that, when invoked, will only be triggered at most once
