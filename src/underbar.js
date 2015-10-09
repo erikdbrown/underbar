@@ -320,24 +320,24 @@
   // instead if possible.
   _.memoize = function(func) {
 
-    var results = [];
-    var result;
+    var results = {};
 
     return function() {
+      var isAKey = false;
 
-      if (_.contains(results, function(item) { return item === func })) {
-        // if the function has been called before
-        // locate result from array and return
-        return result;
-      } else {
-        // push the result into the array
-        // return the result
-        result = func.apply(this, arguments);
-        results.push(func);
-        return result;
+      // check to see if arguments is a key in results
+      // if so, return the value stored
+      for (var key in results) {
+        if (key === arguments) {
+          isAKey = true;
+          return results[key];
+        }
       }
-      }  
-
+      if (!isAKey) {
+        results[arguments] = func.apply(this, arguments);
+        return results[arguments];
+      }
+    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
