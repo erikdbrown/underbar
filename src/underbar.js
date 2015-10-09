@@ -326,13 +326,14 @@
       var isAKey = false;
 
       // check to see if arguments is a key in results
-      // if so, return the value stored
+      // if so, return the stored value
       for (var key in results) {
         if (key === arguments) {
           isAKey = true;
           return results[key];
         }
       }
+      // if it's not in results, store the value and return the value.
       if (!isAKey) {
         results[arguments] = func.apply(this, arguments);
         return results[arguments];
