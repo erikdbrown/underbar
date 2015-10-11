@@ -323,22 +323,20 @@
     var results = {};
 
     return function() {
-      var isAKey = false;
-
+      var args = arguments[0].toString();
       // check to see if arguments is a key in results
       // if so, return the stored value
+
       for (var key in results) {
-        if (key === arguments) {
-          isAKey = true;
+        if (key === args) {
           return results[key];
         }
       }
       // if it's not in results, store the value and return the value.
-      if (!isAKey) {
-        results[arguments] = func.apply(this, arguments);
-        return results[arguments];
+
+        results[args] = func.apply(this, arguments);
+        return results[args];
       }
-    }
   };
 
   // Delays a function for the given number of milliseconds, and then calls
