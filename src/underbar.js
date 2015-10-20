@@ -467,6 +467,34 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+
+    var returnArray = []; // will collect intersected items
+    var totals = {}; // keeps a count of how many times each item is found
+    var arrayCount = 0; // will track which array is being checked
+    var howMany = arguments.length; // defines how many matches need to be found
+
+    
+    
+    _.each(arguments, function(array) { // check each argument
+      _.each(array, function(item) { // check each item in each array
+        if (totals[item] === undefined) { // if the item is not in totals, create a the key as the item and the value as one.
+          totals[item] = 1;
+        } else if (arrayCount < howMany) { // if the item is in totals, check to make sure it's not a duplicate of the same array
+          totals[item]++
+        }
+      })
+      arrayCount++; // tracks which array is being traversed
+    })
+
+    // go through totals and find the key-value pair that matches the number of arrays
+    // push matches to returnArray
+    for (var key in totals) {
+      if (totals[key] === howMany) {
+        returnArray.push(key);
+      }
+    }
+
+    return returnArray;
   };
 
   // Take the difference between one array and a number of other arrays.
