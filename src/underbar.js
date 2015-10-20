@@ -417,14 +417,7 @@
 
     var returnArray = [];
 
-    var longestLength = _.reduce(arguments, function(longestArray, item) {
-      if (item.length > longestArray) { 
-        longestArray = item.length
-        return longestArray } }, 0)
-
-    console.log(longestLength);
-
-    for (var i = 0; i < longestLength; i++) {
+    for (var i = 0; i < arguments[0].length; i++) {
       var pushArray = [];
       for (var k = 0; k < arguments.length; k++) {
         pushArray.push(arguments[k][i]);
@@ -474,7 +467,6 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
-
   };
 
   // Take the difference between one array and a number of other arrays.
