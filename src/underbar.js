@@ -404,8 +404,66 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+    
+    var returnArray = [];
+    var undefinedValues = [];
 
 
+    if (typeof iterator === 'function') {
+      for (var i = 0; i < collection.length; i++) {
+      if (collection[i] === undefined) {
+        undefinedValues.push(collection[i]);
+        collection.splice(i,1);
+      }
+    }
+      while (collection.length > 0) {
+        var smallest = iterator(collection[0]);
+        var position = 0;
+
+        for (var i = 0; i < collection.length; i++) {
+          var value = iterator(collection[i]);
+          if (value < smallest) {
+            smallest = value;
+            position = i;
+          }
+        }
+        returnArray.push(collection[position]);
+        collection.splice(position,1);
+      }
+      _.each(undefinedValues, function(item) {
+        returnArray.push(item);
+      })
+    }
+
+    else if (typeof iterator === 'string') {
+      for (var i = 0; i < collection.length; i++) {
+        for (var key in collection[i]) {
+          if (collection[i][key] === undefined) {
+            undefinedValues.push(collection[i]);
+            collection.splice(i,1);
+          }
+        }
+    }
+      while (collection.length > 0) {
+        var smallest = collection[0][iterator];
+        var position = 0;
+
+        for (var i = 0; i < collection.length; i++) {
+          var value = collection[i][iterator];
+          if (value < smallest) {
+            smallest = value;
+            position = i;
+          }
+        }
+        returnArray.push(collection[position]);
+        collection.splice(position,1);
+      }
+      _.each(undefinedValues, function(item) {
+        returnArray.push(item);
+      })
+    }
+
+    return returnArray;  
   };
 
   // Zip together two or more arrays with elements of the same index
