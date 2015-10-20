@@ -394,11 +394,9 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    // var returnArray = [];
+    
+    // return functionOrKey.apply(null, collection);
 
-    // _.each(collection, function(item) {
-    //   returnArray.push(functionOrKey(this, item));
-    // })
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -406,6 +404,8 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
+
+
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -414,6 +414,28 @@
   // Example:
   // _.zip(['a','b','c','d'], [1,2,3]) returns [['a',1], ['b',2], ['c',3], ['d',undefined]]
   _.zip = function() {
+
+    var returnArray = [];
+
+    var longestLength = _.reduce(arguments, function(longestArray, item) {
+      if (item.length > longestArray) { 
+        longestArray = item.length
+        return longestArray } }, 0)
+
+    console.log(longestLength);
+
+    for (var i = 0; i < longestLength; i++) {
+      var pushArray = [];
+      for (var k = 0; k < arguments.length; k++) {
+        pushArray.push(arguments[k][i]);
+      }
+      returnArray.push(pushArray);
+    }
+
+    return returnArray;
+    // of the arrays into a new array.
+    // push each array into a returnArray
+
   };
 
   // Takes a multidimensional array and converts it to a one-dimensional array.
@@ -452,6 +474,7 @@
   // Takes an arbitrary number of arrays and produces an array that contains
   // every item shared between all the passed-in arrays.
   _.intersection = function() {
+
   };
 
   // Take the difference between one array and a number of other arrays.
