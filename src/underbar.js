@@ -394,9 +394,20 @@
   // Calls the method named by functionOrKey on each value in the list.
   // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-    
-    // return functionOrKey.apply(null, collection);
 
+    var returnArray = [];
+
+    if (typeof functionOrKey === 'function') {
+      _.each(collection, function(item) {
+        returnArray.push(functionOrKey(item));
+      });
+    } else {
+      _.each(collection, function(item) {
+        collection[functionOrKey](item);
+      })
+    }
+
+    return returnArray;
   };
 
   // Sort the object's values by a criterion produced by an iterator.
@@ -404,65 +415,65 @@
   // of that string. For example, _.sortBy(people, 'name') should sort
   // an array of people by their name.
   _.sortBy = function(collection, iterator) {
-    // var returnArray = [];
-    // var undefinedValues = [];
+    var returnArray = [];
+    var undefinedValues = [];
 
 
-    // if (typeof iterator === 'function') {
-    //   for (var i = 0; i < collection.length; i++) {
-    //   if (collection[i] === undefined) {
-    //     undefinedValues.push(collection[i]);
-    //     collection.splice(i,1);
-    //   }
-    // }
-    //   while (collection.length > 0) {
-    //     var smallest = iterator(collection[0]);
-    //     var position = 0;
+    if (typeof iterator === 'function') {
+      for (var i = 0; i < collection.length; i++) {
+      if (collection[i] === undefined) {
+        undefinedValues.push(collection[i]);
+        collection.splice(i,1);
+      }
+    }
+      while (collection.length > 0) {
+        var smallest = iterator(collection[0]);
+        var position = 0;
 
-    //     for (var i = 0; i < collection.length; i++) {
-    //       var value = iterator(collection[i]);
-    //       if (value < smallest) {
-    //         smallest = value;
-    //         position = i;
-    //       }
-    //     }
-    //     returnArray.push(collection[position]);
-    //     collection.splice(position,1);
-    //   }
-    //   _.each(undefinedValues, function(item) {
-    //     returnArray.push(item);
-    //   })
-    // }
+        for (var i = 0; i < collection.length; i++) {
+          var value = iterator(collection[i]);
+          if (value < smallest) {
+            smallest = value;
+            position = i;
+          }
+        }
+        returnArray.push(collection[position]);
+        collection.splice(position,1);
+      }
+      _.each(undefinedValues, function(item) {
+        returnArray.push(item);
+      })
+    }
 
-    // else if (typeof iterator === 'string') {
-    //   for (var i = 0; i < collection.length; i++) {
-    //     for (var key in collection[i]) {
-    //       if (collection[i][key] === undefined) {
-    //         undefinedValues.push(collection[i]);
-    //         collection.splice(i,1);
-    //       }
-    //     }
-    // }
-    //   while (collection.length > 0) {
-    //     var smallest = collection[0][iterator];
-    //     var position = 0;
+    else if (typeof iterator === 'string') {
+      for (var i = 0; i < collection.length; i++) {
+        for (var key in collection[i]) {
+          if (collection[i][key] === undefined) {
+            undefinedValues.push(collection[i]);
+            collection.splice(i,1);
+          }
+        }
+    }
+      while (collection.length > 0) {
+        var smallest = collection[0][iterator];
+        var position = 0;
 
-    //     for (var i = 0; i < collection.length; i++) {
-    //       var value = collection[i][iterator];
-    //       if (value < smallest) {
-    //         smallest = value;
-    //         position = i;
-    //       }
-    //     }
-    //     returnArray.push(collection[position]);
-    //     collection.splice(position,1);
-    //   }
-    //   _.each(undefinedValues, function(item) {
-    //     returnArray.push(item);
-    //   })
-    // }
+        for (var i = 0; i < collection.length; i++) {
+          var value = collection[i][iterator];
+          if (value < smallest) {
+            smallest = value;
+            position = i;
+          }
+        }
+        returnArray.push(collection[position]);
+        collection.splice(position,1);
+      }
+      _.each(undefinedValues, function(item) {
+        returnArray.push(item);
+      })
+    }
 
-    // return returnArray;  
+    return returnArray;  
   };
 
   // Zip together two or more arrays with elements of the same index
@@ -494,31 +505,24 @@
   // Hint: Use Array.isArray to check if something is an array
   _.flatten = function(nestedArray, result) {
 
-    var anyArrays = function(array) {
-      var answer = false;
+    // go through each item in the array.
+    // if an item is not an array, push the item.
+    // if the item is an array, recurse through same function.
+    // return the array.
+    var returnArray = [];
+
+    var flattenArray = function(array) {
       _.each(array, function(item) {
         if (Array.isArray(item)) {
-          answer = true;
-        }
-      })
-      return answer;
-    }
-
-    while (anyArrays(nestedArray)) {
-      var returnArray = [];
-      _.each(nestedArray, function(item) {
-        if (Array.isArray(item)) {
-          _.each(item, function(contents) {
-            returnArray.push(contents);
-          })
+          flattenArray(item);
         } else {
           returnArray.push(item);
         }
-      })
-      nestedArray = returnArray;
-    }
+      });
+    };
 
-    return nestedArray;
+    flattenArray(nestedArray);
+    return returnArray;
   };
 
   // Takes an arbitrary number of arrays and produces an array that contains
@@ -587,5 +591,7 @@
   //
   // Note: This is difficult! It may take a while to implement.
   _.throttle = function(func, wait) {
+
+
   };
 }());
